@@ -17,14 +17,48 @@ St_led_t errorIndicationLED = {
 	.pin = PIN7,
 	.state = LED_OFF
 };
+St_led_t test_led = {
+	.port = PORTD_INDEX,
+	.pin = PIN0,
+	.state = LED_ON
+};
 
 
 int main(void)
-{
-	App_init();
+{	
+	LED_init(&errorIndicationLED);
+	/*==== Test case #1 correct values ====*/
+	test_led.port = PORTD_INDEX;
+	test_led.pin = PIN0;
+	test_led.state = LED_ON;
+	led_retValue = LED_init(&test_led);
+	test_LED_functions_return_value(led_retValue);
+	trun_led_off(&errorIndicationLED);
+	/*==== Test case #2 NULL pointer ====*/
+	led_retValue = LED_init(NULL);
+	test_LED_functions_return_value(led_retValue);
+	trun_led_off(&errorIndicationLED);
+	/*==== Test case #3 wrong port index ====*/
+	test_led.port = 9;
+	led_retValue = LED_init(&test_led);
+	test_LED_functions_return_value(led_retValue);
+	trun_led_off(&errorIndicationLED);
+	/*==== Test case #4 wrong pin index ====*/
+	test_led.port = PORTD_INDEX;
+	test_led.pin = 10;
+	led_retValue = LED_init(&test_led);
+	test_LED_functions_return_value(led_retValue);
+	trun_led_off(&errorIndicationLED);
+	/*==== Test case #5 wrong LED state ====*/
+	test_led.pin = PIN0;
+	test_led.state = 3;
+	led_retValue = LED_init(&test_led);
+	test_LED_functions_return_value(led_retValue);
+	trun_led_off(&errorIndicationLED);
+	//App_init();
     while (1) 
     {
-		App_start();
+		//App_start();
     }
 }
 
